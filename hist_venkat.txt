@@ -1,0 +1,103 @@
+python;
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Import image
+img = cv2.imread(r"C:\Users\venka\Downloads\889feb452dece0edb19c340f1c2168b9.jpg")
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Histogram equalization
+equ = cv2.equalizeHist(gray)
+
+# Calculate histograms
+hist_img = [cv2.calcHist([img], [i], None, [256], [0, 256]) for i in range(3)]
+hist_gray = cv2.calcHist([gray], [0], None, [256], [0, 256])
+hist_equ = cv2.calcHist([equ], [0], None, [256], [0, 256])
+
+plt.figure(figsize=(18, 6))
+
+# Display images
+plt.subplot(2, 3, 1)
+plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB)), plt.title('Original')
+
+plt.subplot(2, 3, 2)
+plt.imshow(gray, cmap='gray'), plt.title('Gray')
+
+plt.subplot(2, 3, 3)
+plt.imshow(equ, cmap='gray'), plt.title('Equalized')
+
+# Display histograms
+plt.subplot(2, 3, 4)
+for i, col in enumerate(['b', 'g', 'r']):
+    plt.plot(hist_img[i], color=col)
+plt.title('Histogram (Original)')
+
+plt.subplot(2, 3, 5)
+plt.plot(hist_gray, color='k')
+plt.title('Histogram (Gray)')
+
+plt.subplot(2, 3, 6)
+plt.plot(hist_equ, color='k')
+plt.title('Histogram (Equalized)')
+
+plt.tight_layout()
+plt.show()
+
+matlap;
+
+
+% Import image
+img = imread('C:\Users\venka\Downloads\889feb452dece0edb19c340f1c2168b9.jpg');
+
+% Convert to grayscale
+gray = rgb2gray(img);
+
+% Histogram equalization
+equ = histeq(gray);
+
+% Calculate histograms
+hist_img_r = imhist(img(:,:,1));
+hist_img_g = imhist(img(:,:,2));
+hist_img_b = imhist(img(:,:,3));
+hist_gray = imhist(gray);
+hist_equ = imhist(equ);
+
+% Display images
+figure('Position', [100, 100, 1200, 600]);
+
+subplot(2, 3, 1);
+imshow(img);
+title('Original');
+
+subplot(2, 3, 2);
+imshow(gray);
+title('Gray');
+
+
+subplot(2, 3, 3);
+imshow(equ);
+title('Equalized');
+
+% Display histograms
+subplot(2, 3, 4);
+plot(hist_img_r, 'r');
+hold on;
+plot(hist_img_g, 'g');
+plot(hist_img_b, 'b');
+title('Histogram (Original)');
+legend('Red', 'Green', 'Blue');
+hold off;
+
+subplot(2, 3, 5);
+plot(hist_gray, 'k');
+title('Histogram (Gray)');
+
+subplot(2, 3, 6);
+plot(hist_equ, 'k');
+title('Histogram (Equalized)');
+
+sgtitle('Image Analysis and Histograms');
+
+
