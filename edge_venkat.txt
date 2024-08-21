@@ -1,0 +1,92 @@
+python:
+
+#import libraries
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+#import the image for edge detection
+img = cv2.imread(r"C:\Users\venka\Downloads\889feb452dece0edb19c340f1c2168b9.jpg")
+#convert it to grayscale image
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Canny Edge Detection
+canny_edge = cv2.Canny(gray, 100, 200)
+
+
+#sobel edge Detection
+sobelx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=5)
+sobely = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=5)
+sobel = cv2.sqrt(cv2.add(cv2.pow(sobelx, 2), cv2.pow(sobely, 2)))
+
+
+#laplacian
+laplacian = cv2.Laplacian(gray, cv2.CV_64F)
+
+#Prewitt
+# Define Prewitt kernels
+kernelx = np.array([[1, 0, -1], [1, 0, -1], [1, 0, -1]], dtype=int)
+kernely = np.array([[1, 1, 1], [0, 0, 0], [-1, -1, -1]], dtype=int)
+
+# Apply Prewitt edge detector
+prewittx = cv2.filter2D(gray, cv2.CV_64F, kernelx) # Change the data type here to CV_64F
+prewitty = cv2.filter2D(gray, cv2.CV_64F, kernely) # Change the data type here to CV_64F
+prewitt = cv2.sqrt(cv2.add(cv2.pow(prewittx, 2), cv2.pow(prewitty, 2)))
+
+#sharr
+scharrx = cv2.Scharr(gray, cv2.CV_64F, 1, 0)
+scharry = cv2.Scharr(gray, cv2.CV_64F, 0, 1)
+scharr = cv2.sqrt(cv2.add(cv2.pow(scharrx, 2), cv2.pow(scharry, 2)))
+
+#plot everything
+plt.figure(figsize=(10, 10))
+plt.subplot(2, 3, 1),plt.imshow(gray, cmap='gray'),plt.title('Original Image')
+plt.subplot(2, 3, 2),plt.imshow(canny_edge, cmap='gray'),plt.title('canny')
+plt.subplot(2, 3, 3),plt.imshow(sobel, cmap='gray'),plt.title('sobel Image')
+plt.subplot(2, 3, 4),plt.imshow(laplacian, cmap='gray'),plt.title('laplacian Image')
+plt.subplot(2, 3, 5),plt.imshow(prewitt, cmap='gray'),plt.title('prewitt Image')
+plt.subplot(2, 3, 6),plt.imshow(scharr, cmap='gray'),plt.title('scharr Image')
+plt.show()
+  
+
+MATLAP;
+
+% Import the image
+img = imread('C:\Users\venka\Downloads\889feb452dece0edb19c340f1c2168b9.jpg');
+
+% Convert to grayscale
+gray = rgb2gray(img);
+
+% Canny Edge Detection
+canny_edge = edge(gray, 'Canny', [0.1 0.2]);
+
+% Sobel Edge Detection
+sobelx = imfilter(double(gray), fspecial('sobel'));
+sobely = imfilter(double(gray), fspecial('sobel')');
+sobel = sqrt(sobelx.^2 + sobely.^2);
+
+% Laplacian Edge Detection
+laplacian = imfilter(double(gray), fspecial('laplacian', 0));
+
+% Prewitt Edge Detection
+prewittx = imfilter(double(gray), fspecial('prewitt'));
+prewitty = imfilter(double(gray), fspecial('prewitt')');
+prewitt = sqrt(prewittx.^2 + prewitty.^2);
+
+% Scharr Edge Detection
+scharrx = imfilter(double(gray), [-3 0 3; -10 0 10; -3 0 3]);
+scharry = imfilter(double(gray), [-3 -10 -3; 0 0 0; 3 10 3]);
+scharr = sqrt(scharrx.^2 + scharry.^2);
+
+% Plotting the results
+figure;
+
+subplot(2, 3, 1), imshow(gray), title('Original Image');
+subplot(2, 3, 2), imshow(canny_edge), title('Canny Edge');
+subplot(2, 3, 3), imshow(sobel, []), title('Sobel Edge');
+subplot(2, 3, 4), imshow(laplacian, []), title('Laplacian Edge');
+subplot(2, 3, 5), imshow(prewitt, []), title('Prewitt Edge');
+subplot(2, 3, 6), imshow(scharr, []), title('Scharr Edge');
+
+% Adjust layout
+set(gcf, 'Position', [100, 100, 1200, 800]);
